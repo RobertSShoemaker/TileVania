@@ -9,10 +9,12 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 moveInput;
     Rigidbody2D myRigidbody;
+    Animator myAnimator;
 
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
+        myAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -31,11 +33,17 @@ public class PlayerMovement : MonoBehaviour
     }
 
     //Change the velocity of the player based on the movement input we got from OnMove()
-    //use runSpeed to control the speed at which the player moves
     void Run()
     {
+        //use runSpeed to control the speed at which the player moves
         Vector2 playerVelocity = new Vector2((moveInput.x * runSpeed), myRigidbody.velocity.y);
         myRigidbody.velocity = playerVelocity;
+
+        //bool is true when the absolute value of the player's x velocity is greater than 0 (or epsilon)
+        bool playerHasHorizontalSpeed = Mathf.Abs(myRigidbody.velocity.x) > Mathf.Epsilon;
+
+        //this will keep the player from getting stuck in the run animation when he isn't moving
+        myAnimator.SetBool("isRunning", playerHasHorizontalSpeed);
     }
 
     //flip the sprite when the player moves to the left/right
