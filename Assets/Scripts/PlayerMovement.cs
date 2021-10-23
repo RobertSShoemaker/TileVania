@@ -11,11 +11,13 @@ public class PlayerMovement : MonoBehaviour
     Vector2 moveInput;
     Rigidbody2D myRigidbody;
     Animator myAnimator;
+    CapsuleCollider2D myCapsuleCollider;
 
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
+        myCapsuleCollider = GetComponent<CapsuleCollider2D>();
     }
 
     // Update is called once per frame
@@ -36,9 +38,14 @@ public class PlayerMovement : MonoBehaviour
     //OnJump is a mehtod that takes the keyboard/controller input and calls this method
     void OnJump(InputValue value)
     {
+        //only jump  when touching the ground
+        //bool canJump = myCollider.IsTouchingLayers(LayerMask.GetMask("Ground"));
+
+        if (!myCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){ return; }
+
         if (value.isPressed)
         {
-            //do stuff
+            //jump
             myRigidbody.velocity += new Vector2(0f, jumpSpeed);
         }
     }
