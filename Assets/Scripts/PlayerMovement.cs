@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float runSpeed = 1f;
+    [SerializeField] float jumpSpeed = 5f;
 
     Vector2 moveInput;
     Rigidbody2D myRigidbody;
@@ -24,12 +25,22 @@ public class PlayerMovement : MonoBehaviour
         FlipSprite();
     }
 
-    //OnMove is the unity created method that takes the keyboard/controller input and moves the player
+    //OnMove is a method that takes the keyboard/controller input and calls this method
     //store the movement input and display it whenever this is called
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
         Debug.Log(moveInput);
+    }
+
+    //OnJump is a mehtod that takes the keyboard/controller input and calls this method
+    void OnJump(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            //do stuff
+            myRigidbody.velocity += new Vector2(0f, jumpSpeed);
+        }
     }
 
     //Change the velocity of the player based on the movement input we got from OnMove()

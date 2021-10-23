@@ -11829,6 +11829,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 185635497, guid: 0e8124df2894893459e868ee4a3f045a, type: 3}
+      propertyPath: m_GravityScale
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 185635497, guid: 0e8124df2894893459e868ee4a3f045a, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1934659223889658028, guid: 0e8124df2894893459e868ee4a3f045a, type: 3}
       propertyPath: m_Name
       value: Player
@@ -11876,6 +11884,10 @@ PrefabInstance:
     - target: {fileID: 1934659223889658030, guid: 0e8124df2894893459e868ee4a3f045a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5671277819849591246, guid: 0e8124df2894893459e868ee4a3f045a, type: 3}
+      propertyPath: jumpSpeed
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e8124df2894893459e868ee4a3f045a, type: 3}
