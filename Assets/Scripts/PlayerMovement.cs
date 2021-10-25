@@ -7,17 +7,21 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float runSpeed = 1f;
     [SerializeField] float jumpSpeed = 5f;
+    [SerializeField] float climbSpeed = 5f;
+
 
     Vector2 moveInput;
     Rigidbody2D myRigidbody;
     Animator myAnimator;
     CapsuleCollider2D myCapsuleCollider;
+    float gravityScaleAtStart;
 
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
         myCapsuleCollider = GetComponent<CapsuleCollider2D>();
+        gravityScaleAtStart = myRigidbody.gravityScale;
     }
 
     // Update is called once per frame
@@ -25,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Run();
         FlipSprite();
+        ClimbLadder();
     }
 
     //OnMove is a method that takes the keyboard/controller input and calls this method
@@ -39,15 +44,38 @@ public class PlayerMovement : MonoBehaviour
     void OnJump(InputValue value)
     {
         //only jump  when touching the ground
-        //bool canJump = myCollider.IsTouchingLayers(LayerMask.GetMask("Ground"));
-
-        if (!myCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){ return; }
+        if (!myCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){return; }
 
         if (value.isPressed)
         {
             //jump
             myRigidbody.velocity += new Vector2(0f, jumpSpeed);
         }
+    }
+
+    void ClimbLadder()
+    {
+        //only climb when touching a ladder
+        if (!myCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Climbing"))) 
+        {
+            //prevents a bug where the player continues the climbing animation if contiously holding up after falling off ladder
+            myAnimator.SetBool("isClimbing", false);
+            //resets the gravity when the player isn't climbing the ladder
+            myRigidbody.gravityScale = gravityScaleAtStart;
+            return; 
+        }
+
+        //use climbSpeed to control the speed at which the player moves
+        Vector2 climbVelocity = new Vector2(myRigidbody.velocity.x, (moveInput.y * climbSpeed));
+        myRigidbody.velocity = climbVelocity;
+        //stops the player from sliding down the ladder when not moving
+        myRigidbody.gravityScale = 0f;
+
+        //bool is true when the absolute value of the player's y velocity is greater than 0 (or epsilon)
+        bool playerHasVerticalSpeed = Mathf.Abs(myRigidbody.velocity.y) > Mathf.Epsilon;
+
+        //this will keep the player from getting stuck in the climb animation when he isn't moving
+        myAnimator.SetBool("isClimbing", playerHasVerticalSpeed);
     }
 
     //Change the velocity of the player based on the movement input we got from OnMove()
