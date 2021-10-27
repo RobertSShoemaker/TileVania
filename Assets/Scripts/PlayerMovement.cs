@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float runSpeed = 1f;
     [SerializeField] float jumpSpeed = 5f;
     [SerializeField] float climbSpeed = 5f;
+    [SerializeField] Vector2 deathKick = new Vector2(10f, 10f);
 
 
     Vector2 moveInput;
@@ -16,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     CapsuleCollider2D myBodyCollider;
     BoxCollider2D myFeetCollider;
     float gravityScaleAtStart;
+    bool isAlive = true;
 
     void Start()
     {
@@ -29,15 +31,20 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //don't let the player move when they are dead
+        if (!isAlive) { return; }
         Run();
         FlipSprite();
         ClimbLadder();
+        Die();
     }
 
     //OnMove is a method that takes the keyboard/controller input and calls this method
     //store the movement input and display it whenever this is called
     void OnMove(InputValue value)
     {
+        //don't let the player move when they are dead
+        if (!isAlive) { return; }
         moveInput = value.Get<Vector2>();
         Debug.Log(moveInput);
     }
@@ -45,6 +52,8 @@ public class PlayerMovement : MonoBehaviour
     //OnJump is a mehtod that takes the keyboard/controller input and calls this method
     void OnJump(InputValue value)
     {
+        //don't let the player move when they are dead
+        if (!isAlive) { return; }
         //only jump  when touching the ground
         if (!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){return; }
 
@@ -110,5 +119,17 @@ public class PlayerMovement : MonoBehaviour
             //will face the negative direction when moving on the negative x axis
             transform.localScale = new Vector2(Mathf.Sign(myRigidbody.velocity.x), 1f);
         }
+    }
+
+    //if player touches enemy, then they are dead. Don't let the player move and fling their body into the air
+    void Die()
+    {
+        if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemies")))
+        {
+            isAlive = false;
+            myAnimator.SetTrigger("Dying");
+            myRigidbody.velocity = deathKick;
+        }
+
     }
 }
