@@ -124,7 +124,7 @@ public class PlayerMovement : MonoBehaviour
     //if player touches enemy, then they are dead. Don't let the player move and fling their body into the air
     void Die()
     {
-        if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemies")))
+        if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemies", "Hazards")))
         {
             isAlive = false;
             myAnimator.SetTrigger("Dying");
