@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpSpeed = 5f;
     [SerializeField] float climbSpeed = 5f;
     [SerializeField] Vector2 deathKick = new Vector2(10f, 10f);
+    [SerializeField] GameObject bullet;
+    [SerializeField] Transform gun;
 
 
     Vector2 moveInput;
@@ -62,6 +64,15 @@ public class PlayerMovement : MonoBehaviour
             //jump
             myRigidbody.velocity += new Vector2(0f, jumpSpeed);
         }
+    }
+
+    //OnJump is a mehtod that takes the keyboard/controller input and calls this method
+    void OnFire (InputValue value)
+    {
+        //don't let the player fire when they are dead
+        if (!isAlive) { return; }
+        //instantiate the bullet
+        Instantiate(bullet, gun.position, transform.rotation);
     }
 
     void ClimbLadder()
