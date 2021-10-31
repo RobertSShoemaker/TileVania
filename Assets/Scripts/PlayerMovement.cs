@@ -132,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    //if player touches enemy, then they are dead. Don't let the player move and fling their body into the air
+    //if player touches enemy, then they are dead. Don't let the player move and fling their body into the air. Reload the level/restart the game.
     void Die()
     {
         if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemies", "Hazards")))
@@ -140,6 +140,7 @@ public class PlayerMovement : MonoBehaviour
             isAlive = false;
             myAnimator.SetTrigger("Dying");
             myRigidbody.velocity = deathKick;
+            FindObjectOfType<GameSession>().ProcessPlayerDeath();
         }
 
     }
