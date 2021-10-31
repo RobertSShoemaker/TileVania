@@ -3,10 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameSession : MonoBehaviour
 {
     [SerializeField] int playerLives = 3;
+    [SerializeField] TextMeshProUGUI livesText;
+    [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] int playerScore = 0;
 
     //Singleton to make sure that we only have one GameSession per level
     void Awake()
@@ -22,6 +26,12 @@ public class GameSession : MonoBehaviour
             //allows GameSession to be kept from one level to the next
             DontDestroyOnLoad(gameObject);
         }
+    }
+
+    void Start()
+    {
+        livesText.text = playerLives.ToString();
+        scoreText.text = playerScore.ToString();
     }
 
     //determine whether we need to restart the level or the entire game based on the number of remaining player lives
@@ -43,6 +53,7 @@ public class GameSession : MonoBehaviour
         playerLives--;
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
+        livesText.text = playerLives.ToString();
     }
 
     //restart the game from level 1 when the player dies
@@ -51,5 +62,12 @@ public class GameSession : MonoBehaviour
         SceneManager.LoadScene(0);
         //make sure we destroy this GameSession when we restart the game
         Destroy(gameObject);
+    }
+
+    //Adds to playerScore when the player picks up coins
+    public void AddScore(int scoreAmount)
+    {
+        playerScore += scoreAmount;
+        scoreText.text = playerScore.ToString();
     }
 }
