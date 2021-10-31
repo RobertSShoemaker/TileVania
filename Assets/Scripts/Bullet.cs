@@ -14,14 +14,18 @@ public class Bullet : MonoBehaviour
     {
         myRigidbody = GetComponent<Rigidbody2D>();
         player = FindObjectOfType<PlayerMovement>();
+        
+        //bullet will fire in the direction that player is facing
         xSpeed = player.transform.localScale.x * bulletSpeed;
     }
 
     void Update()
     {
+        //fire the bullet at the speed of xSpeed
         myRigidbody.velocity = new Vector2(xSpeed, 0f);
     }
 
+    //destroy the enemy and the bullet when they collide
     void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "Enemy")
@@ -31,6 +35,7 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject);
     }
 
+    //destroy the bullet when it collides with anything
     void OnCollisionEnter2D(Collision2D collision)
     {
         Destroy(gameObject);
