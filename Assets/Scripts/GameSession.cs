@@ -60,6 +60,8 @@ public class GameSession : MonoBehaviour
     void ResetGameSession()
     {
         SceneManager.LoadScene(0);
+        //resets the game objects that typically persist through player deaths(coins, enemies, etc.)
+        FindObjectOfType<ScenePersist>().ResetScenePersist();
         //make sure we destroy this GameSession when we restart the game
         Destroy(gameObject);
     }

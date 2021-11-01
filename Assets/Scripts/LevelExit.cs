@@ -29,6 +29,7 @@ public class LevelExit : MonoBehaviour
     {
         //delay before loading next level
         yield return new WaitForSecondsRealtime(levelLoadDelay);
+        FindObjectOfType<ScenePersist>().ResetScenePersist();
         int nextSceneIndex = currentSceneIndex + 1;
 
         //if we are on the last level, then load the first level
